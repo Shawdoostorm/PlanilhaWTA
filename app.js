@@ -1,13 +1,29 @@
-for (let i = 1; i < 21; i++) {
+const express = require('express')
 
-    if (i % 3 == 0 && i % 5 == 0) {
-        console.log('FizzBuzz')
-    } else if (i % 5 == 0) {
-        console.log('BUZZ')
-    } else if ( i % 3 == 0 ){
-        console.log('FIZZ')
-    }else{
-        console.log(i)
-    }
-    
-}
+const TransacoesRepositorio = require("./transacoes-repositorio")
+
+const app = express()
+
+const port = 3000
+
+// Permite acessar o req.body
+app.use(express.json());
+// "Serve" arquivos da pasta public
+app.use(express.static(`${__dirname}/public`))
+
+app.get('/transacoes', (req, res) => {
+    const repositorio = new TransacoesRepositorio()
+    const transacoes = repositorio.listarTransacoes()
+    res.send(transacoes)
+})
+
+app.post('/transacoes', (req, res) => {
+    const repositorio = new TransacoesRepositorio()
+    const transacao = req.body
+    repositorio.criarTransacao(transacao)
+    res.status(201).send(transacao)
+})
+
+app.listen(port, () => {
+    console.log(`Servidor ouvindo na porta ${port}`)
+})
