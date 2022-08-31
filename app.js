@@ -5,7 +5,7 @@ const TransacoesRepositorio = require("./transacoes-repositorio")
 
 const app = express()
 
-const port = 3002
+const port = process.env.PORT || 3000
 
 // Permite acessar o req.body
 app.use(express.json());
